@@ -1,5 +1,6 @@
 package cn.org.wxstc.services.entity;
 
+import com.google.gson.Gson;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
@@ -30,5 +31,9 @@ public class User {
 
     public void setTests(UUID[] tests) {
         Tests = tests;
+    }
+
+    public String toString() {
+        return new Gson().toJson(this);
     }
 }
