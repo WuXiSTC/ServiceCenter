@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Table("Tests")
 public class Test implements Serializable {
-    public Test(UUID ID, String Name, String User, String JMXPath) {
-        this.ID = ID;
+    public Test(String Name, String User, String JMXPath) {
+        this.ID = UUID.randomUUID();
         this.Name = Name;
         this.User = User;
         this.JMXPath = JMXPath;
