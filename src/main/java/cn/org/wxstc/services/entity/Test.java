@@ -9,7 +9,7 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.UUID;
 
-@Table("Test")
+@Table("Tests")
 public class Test implements Serializable {
     public Test(UUID ID, String Name, String User, String JMXPath) {
         this.ID = ID;
