@@ -1,0 +1,12 @@
+USE WXSTC;
+DROP TABLE IF EXISTS Tests;
+CREATE TABLE Tests
+(
+    ID     UUID PRIMARY KEY,
+    NAME   TEXT,
+    USER   TEXT,
+    PLAN   TEXT,
+    LOG    TEXT,
+    RESULT TEXT,
+    TIME   TIMESTAMP,
+);

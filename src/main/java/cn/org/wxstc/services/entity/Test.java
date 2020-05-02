@@ -1,6 +1,7 @@
 package cn.org.wxstc.services.entity;
 
 import com.google.gson.Gson;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
@@ -11,8 +12,8 @@ import java.io.Serializable;
 import java.time.LocalTime;
 import java.util.UUID;
 
-@Table("Tests")
-@RedisHash("user")
+@Table(value = "Tests")
+@CachePut(value = "Tests")
 public class Test implements Serializable {
     public Test(String Name, String User, String JMXPath) {
         this.ID = UUID.randomUUID();
