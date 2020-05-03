@@ -2,11 +2,13 @@ USE WXSTC;
 DROP TABLE IF EXISTS Tests;
 CREATE TABLE Tests
 (
-    ID     UUID PRIMARY KEY,
+    ID     UUID,
     NAME   TEXT,
     USER   TEXT,
     PLAN   TEXT,
     LOG    TEXT,
     RESULT TEXT,
     TIME   TIMESTAMP,
+    PRIMARY KEY(ID,USER),
 );
+CREATE INDEX idx_tests_user on Tests(USER);

@@ -6,7 +6,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
-import org.springframework.data.redis.core.RedisHash;
 
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -15,10 +14,10 @@ import java.util.UUID;
 @Table(value = "Tests")
 @CachePut(value = "Tests")
 public class Test implements Serializable {
-    public Test(String Name, String User, String JMXPath) {
+    public Test(String Name, String USER, String JMXPath) {
         this.ID = UUID.randomUUID();
         this.Name = Name;
-        this.User = User;
+        this.USER = USER;
         this.JMXPath = JMXPath;
         this.UploadedTime = LocalTime.now();
     }
@@ -32,7 +31,7 @@ public class Test implements Serializable {
     String Name;
 
     @Column(value = "USER")
-    String User;
+    String USER;
 
     @Column(value = "PLAN")
     String JMXPath;
@@ -62,12 +61,12 @@ public class Test implements Serializable {
         Name = name;
     }
 
-    public String getUser() {
-        return User;
+    public String getUSER() {
+        return USER;
     }
 
-    public void setUser(String user) {
-        User = user;
+    public void setUSER(String USER) {
+        this.USER = USER;
     }
 
     public String getJMXPath() {

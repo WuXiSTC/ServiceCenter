@@ -11,5 +11,5 @@ public interface DatabaseRepository extends CassandraRepository<Test, String> {
 
     Optional<Test> findByID(UUID ID);
 
-    Iterable<Test> findAllByUser(String User);
+    Iterable<Test> findAllByUSER(String User);
 }

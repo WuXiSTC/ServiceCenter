@@ -29,7 +29,7 @@ class ServicesApplicationTests {
         System.out.println(otest.toString());
         for (cn.org.wxstc.services.entity.Test ot : databaseRepository.findAll())
             System.out.println(ot.toString());
-        for (cn.org.wxstc.services.entity.Test ot : databaseRepository.findByUser("test1"))
+        for (cn.org.wxstc.services.entity.Test ot : databaseRepository.findAllByUSER("test1"))
             System.out.println(ot.toString());
     }
 
@@ -47,9 +47,9 @@ class ServicesApplicationTests {
     void redisUserTests() {
         Map<String, UUID[]> uuids = new HashMap<>();
         for (cn.org.wxstc.services.entity.Test ot : databaseRepository.findAll()) {
-            UUID[] uids = uuids.get(ot.getUser());
-            if (uids == null) uuids.put(ot.getUser(), new UUID[]{ot.getID()});
-            else uuids.put(ot.getUser(), concat(uids, new UUID[]{ot.getID()}));
+            UUID[] uids = uuids.get(ot.getUSER());
+            if (uids == null) uuids.put(ot.getUSER(), new UUID[]{ot.getID()});
+            else uuids.put(ot.getUSER(), concat(uids, new UUID[]{ot.getID()}));
         }
         for (Map.Entry<String, UUID[]> entry : uuids.entrySet()) {
             cn.org.wxstc.services.entity.User user =
