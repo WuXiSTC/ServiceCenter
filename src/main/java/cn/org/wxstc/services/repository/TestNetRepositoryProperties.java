@@ -1,14 +1,23 @@
-package cn.org.wxstc.services.api;
+package cn.org.wxstc.services.repository;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "cn.org.wxstc.services.testnet")
-public class TestNetProperties {
+@ConfigurationProperties(prefix = "cn.org.wxstc.services.test-net")
+public class TestNetRepositoryProperties {
+    private String protocol = "http";
     private String host;
     private int port;
     private String taskOperationPath = "/Task";
     private String GraphQueryPath = "/GraphQuery";
-    private String TasksQueryPath = "getTasks";
+    private String TasksQueryPath = "/getTasks";
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
 
     public void setHost(String host) {
         this.host = host;
