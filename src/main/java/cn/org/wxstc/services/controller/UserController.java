@@ -1,6 +1,5 @@
 package cn.org.wxstc.services.controller;
 
-import cn.org.wxstc.services.api.FileCenter;
 import cn.org.wxstc.services.api.UserAuth;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +18,7 @@ public class UserController {
                          @RequestParam(value = "ID") String ID,
                          @RequestParam(value = "PASS") String PASS) {
         boolean ok = userAuth.Verify(ID, PASS);
-        if (ok) request.getSession().setAttribute("USER", ID);
+        if (ok) SessionTools.SetUSER(request, ID);
         return ok;
     }
 }
