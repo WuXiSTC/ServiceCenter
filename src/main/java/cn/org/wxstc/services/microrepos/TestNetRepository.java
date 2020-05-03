@@ -1,4 +1,4 @@
-package cn.org.wxstc.services.repository;
+package cn.org.wxstc.services.microrepos;
 
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -25,9 +25,9 @@ public class TestNetRepository {
                 .scheme(properties.getProtocol())
                 .host(properties.getHost())
                 .port(properties.getPort())
-                .path("/{op}/{ID}").build()
-                .expand(op, ID.toString())
-                .encode().toUri();
+                .path(properties.getTaskOperationPath())
+                .path(op).path(ID.toString())
+                .build().encode().toUri();
     }
 
     public JSONObject New(UUID ID, File jmx) {

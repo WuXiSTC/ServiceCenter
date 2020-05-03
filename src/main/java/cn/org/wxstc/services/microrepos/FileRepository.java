@@ -1,16 +1,13 @@
-package cn.org.wxstc.services.repository;
+package cn.org.wxstc.services.microrepos;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.File;
 import java.net.URI;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 @Repository
@@ -33,9 +30,9 @@ public class FileRepository {
                 .scheme(properties.getProtocol())
                 .host(properties.getHost())
                 .port(properties.getPort())
-                .path("{apiPath}/{Dir}/{ID}.{Type}").build()
-                .expand(properties.getApiPath(), Type, ID.toString(), Type)
-                .encode().toUri();
+                .path(properties.getApiPath())
+                .path(Type).path(ID.toString()).path(Type)
+                .build().encode().toUri();
     }
 
     public void PutByIDAndType(UUID ID, String Type, File file) {

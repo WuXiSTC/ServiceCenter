@@ -1,4 +1,4 @@
-package cn.org.wxstc.services.repository;
+package cn.org.wxstc.services.microrepos;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
