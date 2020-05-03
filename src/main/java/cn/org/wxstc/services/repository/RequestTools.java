@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -35,12 +36,16 @@ public class RequestTools {
         return restTemplate.getForEntity(URL, JSONObject.class, params).getBody();
     }
 
-    static public File GetFile(String URL) {
+    static public File GetFile(URI URL) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.execute(URL, HttpMethod.GET, null, clientHttpResponse -> {
             File ret = File.createTempFile("download", "tmp");
             StreamUtils.copy(clientHttpResponse.getBody(), new FileOutputStream(ret));
             return ret;
         });
+    }
+
+    static public void PostFile(URI URL, File file) {
+        //TODO:发送文件
     }
 }

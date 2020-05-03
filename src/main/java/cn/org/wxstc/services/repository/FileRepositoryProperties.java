@@ -1,9 +1,10 @@
-package cn.org.wxstc.services.api;
+package cn.org.wxstc.services.repository;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "cn.org.wxstc.services.filecenter")
-public class FileCenterProperties {
+@ConfigurationProperties(prefix = "cn.org.wxstc.services.file-repo")
+public class FileRepositoryProperties {
+    private String protocol = "http";
     private String host;
     private int port;
     private String apiPath = "/api";
@@ -30,5 +31,13 @@ public class FileCenterProperties {
 
     public String getApiPath() {
         return apiPath;
+    }
+
+    public void setProtocol(String protocol) {
+        this.protocol = protocol;
+    }
+
+    public String getProtocol() {
+        return protocol;
     }
 }
