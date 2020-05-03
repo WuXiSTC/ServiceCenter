@@ -5,7 +5,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.util.SortedMap;
-import java.util.SortedSet;
 import java.util.UUID;
 
 @RedisHash("user")
@@ -33,6 +32,10 @@ public class User {
 
     public void setTests(SortedMap<UUID, String> tests) {
         Tests = tests;
+    }
+
+    public void putTest(Test test) {
+        Tests.put(test.getID(), test.getName());
     }
 
     public String toString() {
