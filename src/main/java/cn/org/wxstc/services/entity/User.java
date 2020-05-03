@@ -4,15 +4,17 @@ import com.google.gson.Gson;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.UUID;
 
 @RedisHash("user")
 public class User {
     @Id
     String ID;
-    UUID[] Tests;
+    SortedMap<UUID, String> Tests;
 
-    public User(String ID, UUID[] Tests) {
+    public User(String ID, SortedMap<UUID, String> Tests) {
         this.ID = ID;
         this.Tests = Tests;
     }
@@ -25,11 +27,11 @@ public class User {
         this.ID = ID;
     }
 
-    public UUID[] getTests() {
+    public SortedMap<UUID, String> getTests() {
         return Tests;
     }
 
-    public void setTests(UUID[] tests) {
+    public void setTests(SortedMap<UUID, String> tests) {
         Tests = tests;
     }
 

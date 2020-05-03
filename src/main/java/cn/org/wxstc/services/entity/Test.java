@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
+import com.datastax.driver.core.utils.UUIDs;
 
 import java.io.Serializable;
 import java.time.LocalTime;
@@ -15,11 +16,10 @@ import java.util.UUID;
 @CachePut(value = "Tests")
 public class Test implements Serializable {
     public Test(String Name, String USER, String JMXPath) {
-        this.ID = UUID.randomUUID();
+        this.ID = UUIDs.timeBased();
         this.Name = Name;
         this.USER = USER;
         this.JMXPath = JMXPath;
-        this.UploadedTime = LocalTime.now();
     }
 
     @PrimaryKey
@@ -41,9 +41,6 @@ public class Test implements Serializable {
 
     @Column(value = "RESULT")
     String JTLPath;
-
-    @Column(value = "TIME")
-    LocalTime UploadedTime;
 
     public UUID getID() {
         return ID;
@@ -91,14 +88,6 @@ public class Test implements Serializable {
 
     public void setJTLPath(String path) {
         JTLPath = path;
-    }
-
-    public LocalTime getUploadedTime() {
-        return UploadedTime;
-    }
-
-    public void setUploadedTime(LocalTime time) {
-        UploadedTime = time;
     }
 
     @Override

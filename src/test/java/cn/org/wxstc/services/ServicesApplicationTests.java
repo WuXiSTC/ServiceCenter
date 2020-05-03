@@ -33,25 +33,19 @@ class ServicesApplicationTests {
             System.out.println(ot.toString());
     }
 
-
-    private static <T> T[] concat(T[] first, T[] second) {
-        T[] result = Arrays.copyOf(first, first.length + second.length);
-        System.arraycopy(second, 0, result, first.length, second.length);
-        return result;
-    }
-
     @Autowired
     RedisUserRepository redisUserRepository;
 
     @Test
     void redisUserTests() {
-        Map<String, UUID[]> uuids = new HashMap<>();
+        Map<String, SortedMap<UUID, String>> uuids = new HashMap<>();
         for (cn.org.wxstc.services.entity.Test ot : databaseRepository.findAll()) {
-            UUID[] uids = uuids.get(ot.getUSER());
-            if (uids == null) uuids.put(ot.getUSER(), new UUID[]{ot.getID()});
-            else uuids.put(ot.getUSER(), concat(uids, new UUID[]{ot.getID()}));
+            SortedMap<UUID, String> uids = uuids.get(ot.getUSER());
+            if (uids == null) uids = new TreeMap<>();
+            uids.put(ot.getID(), ot.getName());
+            uuids.put(ot.getUSER(), uids);
         }
-        for (Map.Entry<String, UUID[]> entry : uuids.entrySet()) {
+        for (Map.Entry<String, SortedMap<UUID, String>> entry : uuids.entrySet()) {
             cn.org.wxstc.services.entity.User user =
                     new cn.org.wxstc.services.entity.User(entry.getKey(), entry.getValue());
             redisUserRepository.save(user);

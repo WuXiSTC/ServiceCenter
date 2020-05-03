@@ -1,14 +1,15 @@
+DROP KEYSPACE IF EXISTS WXSTC;
+CREATE KEYSPACE WXSTC WITH REPLICATION={'class':'SimpleStrategy','replication_factor':1};
 USE WXSTC;
 DROP TABLE IF EXISTS Tests;
 CREATE TABLE Tests
 (
-    ID     UUID,
+    ID     TIMEUUID,
     NAME   TEXT,
     USER   TEXT,
     PLAN   TEXT,
     LOG    TEXT,
     RESULT TEXT,
-    TIME   TIMESTAMP,
     PRIMARY KEY(ID,USER),
 );
 CREATE INDEX idx_tests_user on Tests(USER);
