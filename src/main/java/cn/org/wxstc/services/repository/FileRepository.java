@@ -2,6 +2,8 @@ package cn.org.wxstc.services.repository;
 
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -16,12 +18,9 @@ import java.util.UUID;
 public class FileRepository {
     FileRepositoryProperties properties;
 
-    private void Put(String url, File file, Map<String, String> Hashs) {
-        StringBuilder params = new StringBuilder("?");
-        for (Map.Entry<String, String> hash : Hashs.entrySet())
-            params.append(hash.getKey()).append("=").append(hash.getValue()).append("&");
-        UriComponents uriComponents = UriComponentsBuilder.fromUriString(url + params.toString()).build().encode();
-        RequestTools.PostFile(uriComponents.toUri(), file);
+    private void Put(URI url, File file, MultiValueMap<String, String> Hashs) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromUri(url).queryParams(Hashs);
+        RequestTools.PostFile(builder.build().encode().toUri(), file);
     }
 
 
@@ -40,9 +39,9 @@ public class FileRepository {
     }
 
     public void PutByIDAndType(UUID ID, String Type, File file) {
-        Map<String, String> Hashs = new HashMap<>();
+        MultiValueMap<String, String> Hashs = new LinkedMultiValueMap<>();
         //TODO:文件加密
-        Put(makeURL(ID, Type).toString(), file, Hashs);
+        Put(makeURL(ID, Type), file, Hashs);
     }
 
     public File GetByIDAndType(UUID ID, String Type) {

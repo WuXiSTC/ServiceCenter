@@ -18,7 +18,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class RequestTools {
-    static public JSONObject Post(String URL, MultiValueMap<String, Object> form_data) {
+    static public JSONObject Post(URI URL, MultiValueMap<String, Object> form_data) {
         RestTemplate restTemplate = new RestTemplate();
         FormHttpMessageConverter fc = new FormHttpMessageConverter();
         StringHttpMessageConverter stringConverter = new StringHttpMessageConverter(StandardCharsets.UTF_8);
@@ -30,10 +30,9 @@ public class RequestTools {
         return restTemplate.postForEntity(URL, form_data, JSONObject.class).getBody();
     }
 
-    static public JSONObject Get(String URL, Map<String, String> params) {
+    static public JSONObject Get(URI URL, Map<String, String> params) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.getForEntity(URL, JSONObject.class, params);
-        return restTemplate.getForEntity(URL, JSONObject.class, params).getBody();
+        return restTemplate.getForEntity(URL.toString(), JSONObject.class, params).getBody();
     }
 
     static public File GetFile(URI URL) {
