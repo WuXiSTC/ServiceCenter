@@ -2,9 +2,9 @@ package cn.org.wxstc.services.repository;
 
 import cn.org.wxstc.services.entity.Test;
 import cn.org.wxstc.services.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.Repository;
 
+import javax.annotation.Resource;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -12,11 +12,11 @@ import java.util.UUID;
 
 @org.springframework.stereotype.Repository("UserRepository")
 public class UserRepository implements Repository<User, String> {
-    @Autowired
+    @Resource
     DatabaseRepository databaseRepository;
-    @Autowired
+    @Resource
     RedisUserRepository redisUserRepository;
-    @Autowired
+    @Resource
     RedisTestRepository redisTestRepository;
 
     /**

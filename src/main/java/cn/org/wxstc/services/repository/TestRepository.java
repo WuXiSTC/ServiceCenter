@@ -2,18 +2,18 @@ package cn.org.wxstc.services.repository;
 
 import cn.org.wxstc.services.entity.Test;
 import cn.org.wxstc.services.entity.User;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.Repository;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 @org.springframework.stereotype.Repository("TestRepository")
 public class TestRepository implements Repository<Test, String> {
-    @Autowired
+    @Resource
     DatabaseRepository databaseRepository;
-    @Autowired
+    @Resource
     RedisTestRepository redisTestRepository;
-    @Autowired
+    @Resource
     UserRepository userRepository;
 
     public <S extends Test> S save(S test) {
