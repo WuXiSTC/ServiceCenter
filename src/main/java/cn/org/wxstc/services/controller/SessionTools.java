@@ -9,7 +9,7 @@ public class SessionTools {
 
     static public String GetUSER(HttpServletRequest request) {
         Object USERObj = request.getSession().getAttribute("USER");
-        if (USERObj != null) return (String) USERObj;
+        if (USERObj != null) return USERObj.toString();
         return null;
     }
 }

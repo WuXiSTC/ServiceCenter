@@ -30,7 +30,7 @@ public class TestRepository implements Repository<Test, String> {
         return test;
     }
 
-    private Optional<Test> findByID(UUID ID) {
+    public Optional<Test> findByID(UUID ID) {
         Optional<Test> test = redisTestRepository.findByID(ID);//先查Test缓存
         if (test.isPresent()) return test;//存在则返回
         test = databaseRepository.findByID(ID);//否则就从数据库查询该测试
