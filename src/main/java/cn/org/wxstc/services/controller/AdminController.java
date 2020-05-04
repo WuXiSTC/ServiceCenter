@@ -1,6 +1,7 @@
 package cn.org.wxstc.services.controller;
 
 import cn.org.wxstc.services.api.AdminService;
+import cn.org.wxstc.services.entity.Test;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,14 @@ import java.util.UUID;
 public class AdminController {
     @javax.annotation.Resource
     AdminService adminService;
+
+    @RequestMapping(value = "/admin/getTask/{ID}")
+    public ResponseEntity<Test> GetTask(HttpServletRequest request,
+                                        @PathVariable(value = "ID") UUID ID) {
+        Test test = adminService.findByID(ID);
+        if (test == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(test, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/admin/Task/start/{ID}")
     public ResponseEntity<JSONObject> Start(HttpServletRequest request, @PathVariable(value = "ID") UUID ID) {

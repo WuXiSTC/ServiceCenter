@@ -3,16 +3,15 @@ package cn.org.wxstc.services;
 import com.alibaba.fastjson.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.ResponseEntity;
 
 @SpringBootTest
 class ServicesApplicationTests {
 
     @Test
     void contextLoads() {
-        JSONObject obj = new JSONObject();
-        obj.put("ok",true);
-        Object ok = obj.get("okk");
-        System.out.println(ok.equals(true));
+        String aaa = ResponseEntity.ok().body(null).toString();
+        System.out.println(aaa);
     }
 
 }

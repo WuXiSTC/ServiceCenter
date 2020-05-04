@@ -1,6 +1,7 @@
 package cn.org.wxstc.services.controller;
 
 import cn.org.wxstc.services.api.UserService;
+import cn.org.wxstc.services.entity.Test;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,16 @@ import java.util.UUID;
 public class UserTestController {
     @javax.annotation.Resource
     UserService userService;
+
+    @RequestMapping(value = "/user/getTask/{ID}")
+    public ResponseEntity<Test> GetTask(HttpServletRequest request,
+                                        @PathVariable(value = "ID") UUID ID) {
+        String USER = SessionTools.GetUSER(request);
+        if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        Test test = userService.findByIDAndUser(ID, USER);
+        if (test == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(test, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/user/Task/new/{Name}")
     public ResponseEntity<JSONObject> New(HttpServletRequest request,
