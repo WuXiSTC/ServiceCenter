@@ -21,20 +21,13 @@ public class UserTestController {
     @javax.annotation.Resource
     UserService userService;
 
-    private ResponseEntity<JSONObject> JSON(boolean ok, String message, HttpStatus status) {
-        JSONObject o = new JSONObject();
-        o.put("ok", ok);
-        o.put("message", message);
-        return new ResponseEntity<>(o, status);
-    }
-
     @RequestMapping(value = "/user/Task/new/{Name}")
     public ResponseEntity<JSONObject> New(HttpServletRequest request,
                                           @PathVariable(value = "Name") String Name,
                                           @RequestParam("jmx") MultipartFile file) {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(new JSONObject(), HttpStatus.UNAUTHORIZED);
-        if (file == null || file.isEmpty()) return JSON(false, "请上传文件", HttpStatus.BAD_REQUEST);
+        if (file == null || file.isEmpty()) return SessionTools.JSON(false, "请上传文件", HttpStatus.BAD_REQUEST);
         try {
             File jmx = File.createTempFile("cn.org.wxstc.services", "tmp");
             file.transferTo(jmx);
@@ -43,7 +36,7 @@ public class UserTestController {
             jmx.delete();
             return result;
         } catch (Exception e) {
-            return JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return SessionTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -54,7 +47,7 @@ public class UserTestController {
         try {
             return new ResponseEntity<>(userService.StartByIDAndUser(ID, USER), HttpStatus.OK);
         } catch (Exception e) {
-            return JSON(false, e.toString(), HttpStatus.OK);
+            return SessionTools.JSON(false, e.toString(), HttpStatus.OK);
         }
     }
 
@@ -65,7 +58,7 @@ public class UserTestController {
         try {
             return new ResponseEntity<>(userService.StopByIDAndUser(ID, USER), HttpStatus.OK);
         } catch (Exception e) {
-            return JSON(false, e.toString(), HttpStatus.OK);
+            return SessionTools.JSON(false, e.toString(), HttpStatus.OK);
         }
     }
 
