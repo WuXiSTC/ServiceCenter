@@ -61,7 +61,9 @@ public class UserTestController {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         try {
-            return new ResponseEntity<>(userService.StartByIDAndUser(ID, USER), HttpStatus.OK);
+            JSONObject obj = userService.StartByIDAndUser(ID, USER);
+            if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -72,7 +74,9 @@ public class UserTestController {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(new JSONObject(), HttpStatus.UNAUTHORIZED);
         try {
-            return new ResponseEntity<>(userService.StopByIDAndUser(ID, USER), HttpStatus.OK);
+            JSONObject obj = userService.StopByIDAndUser(ID, USER);
+            if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -99,7 +103,9 @@ public class UserTestController {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         try {
-            return new ResponseEntity<>(userService.getStateByIDAndUser(ID, USER), HttpStatus.OK);
+            JSONObject obj = userService.getStateByIDAndUser(ID, USER);
+            if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

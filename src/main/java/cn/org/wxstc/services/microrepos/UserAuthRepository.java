@@ -5,7 +5,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
@@ -16,7 +15,6 @@ import java.net.URI;
 public class UserAuthRepository {
     @Resource
     private UserAuthRepositoryProperties properties;
-    private RestTemplate restTemplate = new RestTemplate();
 
     private URI makeURL(String op) {
         return UriComponentsBuilder.newInstance()
