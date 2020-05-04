@@ -2,7 +2,7 @@ package cn.org.wxstc.services.microrepos;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "cn.org.wxstc.services.userauth")
+@ConfigurationProperties(prefix = "cn.org.wxstc.services.user-auth")
 public class UserAuthRepositoryProperties {
     private String protocol = "http";
     private String host;

@@ -2,7 +2,7 @@ package cn.org.wxstc.services.microrepos;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "cn.org.wxstc.services.test-net")
+@ConfigurationProperties(prefix = "cn.org.wxstc.services.test-net-repo")
 public class TestNetRepositoryProperties {
     private String protocol = "http";
     private String host;
