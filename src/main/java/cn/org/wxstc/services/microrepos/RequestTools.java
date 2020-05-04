@@ -38,13 +38,15 @@ public class RequestTools {
     static public File GetFile(URI URL) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.execute(URL, HttpMethod.GET, null, clientHttpResponse -> {
+            if (clientHttpResponse.getStatusCode() != HttpStatus.OK) return null;
             File ret = File.createTempFile("download", "tmp");
             StreamUtils.copy(clientHttpResponse.getBody(), new FileOutputStream(ret));
             return ret;
         });
     }
 
-    static public void PostFile(URI URL, File file) {
+    static public JSONObject PostFile(URI URL, File file) {
         //TODO:发送文件
+        return null;
     }
 }

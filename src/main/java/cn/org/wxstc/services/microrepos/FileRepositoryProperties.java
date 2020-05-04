@@ -7,7 +7,7 @@ public class FileRepositoryProperties {
     private String protocol = "http";
     private String host;
     private int port;
-    private String apiPath = "/api";
+    private String rootPath = "/api";
 
     public void setHost(String host) {
         this.host = host;
@@ -25,12 +25,12 @@ public class FileRepositoryProperties {
         return port;
     }
 
-    public void setApiPath(String apiPath) {
-        this.apiPath = apiPath;
+    public void setRootPath(String rootPath) {
+        this.rootPath = rootPath;
     }
 
-    public String getApiPath() {
-        return apiPath;
+    public String getRootPath() {
+        return rootPath;
     }
 
     public void setProtocol(String protocol) {
