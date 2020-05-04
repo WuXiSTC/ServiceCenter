@@ -28,7 +28,9 @@ public class AdminController {
     @RequestMapping(value = "/admin/Task/start/{ID}")
     public ResponseEntity<JSONObject> Start(HttpServletRequest request, @PathVariable(value = "ID") UUID ID) {
         try {
-            return new ResponseEntity<>(adminService.StartByID(ID), HttpStatus.OK);
+            JSONObject obj = adminService.StartByID(ID);
+            if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -37,7 +39,9 @@ public class AdminController {
     @RequestMapping(value = "/admin/Task/stop/{ID}")
     public ResponseEntity<JSONObject> Stop(HttpServletRequest request, @PathVariable(value = "ID") UUID ID) {
         try {
-            return new ResponseEntity<>(adminService.StopByID(ID), HttpStatus.OK);
+            JSONObject obj = adminService.StopByID(ID);
+            if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
