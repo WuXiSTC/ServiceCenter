@@ -30,9 +30,9 @@ public class RequestTools {
         return restTemplate.postForEntity(URL, form_data, JSONObject.class).getBody();
     }
 
-    static public JSONObject Get(URI URL, Map<String, String> params) {
+    static public JSONObject Get(URI URL) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForEntity(URL.toString(), JSONObject.class, params).getBody();
+        return restTemplate.getForEntity(URL.toString(), JSONObject.class).getBody();
     }
 
     static public File GetFile(URI URL) {
