@@ -82,4 +82,16 @@ public class UserTestController {
         }
     }
 
+    @RequestMapping(value = "/user/Task/getState/{ID}")
+    public ResponseEntity<JSONObject> GetState(HttpServletRequest request,
+                                               @PathVariable(value = "ID") UUID ID) {
+        String USER = SessionTools.GetUSER(request);
+        if (USER == null) return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        try {
+            return new ResponseEntity<>(userService.getStateByIDAndUser(ID, USER), HttpStatus.OK);
+        } catch (Exception e) {
+            return SessionTools.JSON(false, e.toString(), HttpStatus.OK);
+        }
+    }
+
 }
