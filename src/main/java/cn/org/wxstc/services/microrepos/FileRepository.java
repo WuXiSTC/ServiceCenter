@@ -25,18 +25,18 @@ public class FileRepository {
                 .build().encode().toUri();
     }
 
-    public File GetByPath(String path) {
+    public File Get(String path) {
         return RequestTools.GetFile(makeURL(path));
     }
 
-    private JSONObject Put(URI url, File file, MultiValueMap<String, String> Hashs) {
+    private JSONObject put(URI url, File file, MultiValueMap<String, String> Hashs) {
         UriComponentsBuilder builder = UriComponentsBuilder.fromUri(url).queryParams(Hashs);
         return RequestTools.PostFile(builder.build().encode().toUri(), file);
     }
 
-    public JSONObject PutByPath(String path, File file) {
+    public JSONObject Put(String path, File file) {
         MultiValueMap<String, String> Hashs = new LinkedMultiValueMap<>();
         //TODO:文件加密
-        return Put(makeURL(path), file, Hashs);
+        return put(makeURL(path), file, Hashs);
     }
 }
