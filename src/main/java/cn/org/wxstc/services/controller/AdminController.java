@@ -67,7 +67,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/getGraph")
-    public ResponseEntity<JSONObject> GetTasks(HttpServletRequest request) {
+    public ResponseEntity<JSONObject> GetGraph(HttpServletRequest request) {
         try {
             return new ResponseEntity<>(adminService.getGraph(), HttpStatus.OK);
         } catch (Exception e) {
