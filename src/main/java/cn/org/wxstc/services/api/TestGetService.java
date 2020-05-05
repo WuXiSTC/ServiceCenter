@@ -7,7 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 @Service
 public class TestGetService {
@@ -18,7 +19,7 @@ public class TestGetService {
     @Resource
     private TestOpService testOpService;
 
-    public JSONObject getStateByTest(Test test) {
+    public JSONObject getStateByTest(Test test) throws IOException {
         JSONObject result = testNetRepository.getState(test.getID());//存在则获取
         if (result != null) {
             if (result.get("stateCode").equals(2) || result.get("stateCode").equals("2"))
@@ -31,7 +32,7 @@ public class TestGetService {
         return result;//无则返回已停止
     }
 
-    public File getFileByTestAndType(Test test, String Type) {
+    public InputStream getFileByTestAndType(Test test, String Type) {
         String path;
         switch (Type) {
             case "jmx":
