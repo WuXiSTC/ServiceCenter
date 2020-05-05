@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.File;
+import java.io.InputStream;
 import java.util.UUID;
 
 public class AdminController {
@@ -48,13 +49,13 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/Task/get/{ID}/{Type}")
-    public ResponseEntity<Resource> Get(HttpServletRequest request,
-                                        @PathVariable(value = "Type") String Type,
-                                        @PathVariable(value = "ID") UUID ID) {
+    public ResponseEntity<InputStream> Get(HttpServletRequest request,
+                                           @PathVariable(value = "Type") String Type,
+                                           @PathVariable(value = "ID") UUID ID) {
         try {
-            File file = adminService.getFileByIDAndType(ID, Type);
+            InputStream file = adminService.getFileByIDAndType(ID, Type);
             if (file == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            return ResponseTools.File(file);
+            return new ResponseEntity<>(file, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
