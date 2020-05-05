@@ -19,7 +19,7 @@ public class ResponseTools {
     }
 
     static public ResponseEntity<Resource> File(File file) {
-        if (file == null || !file.exists() || !file.isFile()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (!file.exists() || !file.isFile()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         try {
             InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
             return ResponseEntity.ok()

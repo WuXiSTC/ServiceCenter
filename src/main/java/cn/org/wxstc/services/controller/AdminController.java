@@ -53,6 +53,7 @@ public class AdminController {
                                         @PathVariable(value = "ID") UUID ID) {
         try {
             File file = adminService.getFileByIDAndType(ID, Type);
+            if (file == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return ResponseTools.File(file);
         } catch (Exception e) {
             e.printStackTrace();
@@ -64,7 +65,9 @@ public class AdminController {
     public ResponseEntity<JSONObject> GetState(HttpServletRequest request,
                                                @PathVariable(value = "ID") UUID ID) {
         try {
-            return new ResponseEntity<>(adminService.getStateByID(ID), HttpStatus.OK);
+            JSONObject obj = adminService.getStateByID(ID);
+            if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             return ResponseTools.JSON(false, e.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

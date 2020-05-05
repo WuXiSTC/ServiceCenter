@@ -90,10 +90,11 @@ public class UserTestController {
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         try {
             File file = userService.getFileByIDAndUserAndType(ID, USER, Type);
+            if (file == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return ResponseTools.File(file);
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
