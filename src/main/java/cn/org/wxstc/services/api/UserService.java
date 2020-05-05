@@ -6,6 +6,7 @@ import cn.org.wxstc.services.repository.TestRepository;
 import cn.org.wxstc.services.repository.UserRepository;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -43,7 +44,7 @@ public class UserService {
         return test.orElse(null);
     }
 
-    public JSONObject NewByUserAndName(String USER, String Name, File jmx) {
+    public ResponseEntity<?> NewByUserAndName(String USER, String Name, File jmx) {
         return testOpService.NewByUserAndName(USER, Name, jmx);
     }
 

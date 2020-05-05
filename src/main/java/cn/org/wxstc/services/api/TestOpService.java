@@ -6,6 +6,8 @@ import cn.org.wxstc.services.microrepos.TestNetRepository;
 import cn.org.wxstc.services.repository.TestRepository;
 import com.alibaba.fastjson.JSONObject;
 import com.datastax.driver.core.utils.UUIDs;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -21,16 +23,16 @@ public class TestOpService {
     @Resource
     private FileRepository fileRepository;
 
-    public JSONObject NewByUserAndName(String USER, String Name, File jmx) {
+    public ResponseEntity<?> NewByUserAndName(String USER, String Name, File jmx) {
         UUID ID = UUIDs.timeBased();
         String jmxPath = ServiceTools.getPathByIDAndUserAndType(ID, USER, "jmx");
-        JSONObject result = fileRepository.Put(jmxPath, jmx);//先上传文件
-        if (ServiceTools.IsOk(result)) return result;//失败则返回
+        ResponseEntity<String> result = fileRepository.Put(jmxPath, jmx);//先上传文件
+        if (result.getStatusCode() != HttpStatus.OK) return result;//失败则返回
         testRepository.save(new Test(Name, USER, jmxPath));//然后记录数据库
-        result = new JSONObject();
-        result.put("ok", true);
-        result.put("message", "新建成功");
-        return result;
+        JSONObject j = new JSONObject();
+        j.put("ok", true);
+        j.put("message", "新建成功");
+        return new ResponseEntity<>(j, HttpStatus.OK);
     }
 
     public JSONObject StartByTest(Test test) {

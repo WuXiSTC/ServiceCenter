@@ -43,17 +43,16 @@ public class UserTestController {
     }
 
     @RequestMapping(value = "/user/Task/new/{Name}")
-    public ResponseEntity<JSONObject> New(HttpServletRequest request,
-                                          @PathVariable(value = "Name") String Name,
-                                          @RequestParam("jmx") MultipartFile file) {
+    public ResponseEntity<?> New(HttpServletRequest request,
+                                 @PathVariable(value = "Name") String Name,
+                                 @RequestParam("jmx") MultipartFile file) {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (file == null || file.isEmpty()) return ResponseTools.JSON(false, "请上传文件", HttpStatus.BAD_REQUEST);
         try {
             File jmx = tempProperties.TempFile();
             file.transferTo(jmx);
-            ResponseEntity<JSONObject> result = new ResponseEntity<>(
-                    userService.NewByUserAndName(USER, Name, jmx), HttpStatus.OK);
+            ResponseEntity<?> result = userService.NewByUserAndName(USER, Name, jmx);
             jmx.delete();
             return result;
         } catch (Exception e) {
