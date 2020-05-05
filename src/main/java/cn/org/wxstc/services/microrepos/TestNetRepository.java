@@ -25,6 +25,8 @@ import java.util.UUID;
 public class TestNetRepository {
     @Resource
     TestNetRepositoryProperties properties;
+    @Resource
+    private TempProperties tempProperties;
 
     private UriComponentsBuilder makeURIBuilder() {
         return UriComponentsBuilder.newInstance()
@@ -39,10 +41,12 @@ public class TestNetRepository {
                 .build().encode().toUri();
     }
 
-    public JSONObject New(UUID ID, File jmx) {
+    public JSONObject New(UUID ID, InputStream jmx) throws IOException {
+        File file = tempProperties.TempFile();
+        StreamUtils.copy(jmx, new FileOutputStream(file));
         URI url = makeURL("/new", ID);
         MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
-        request.add("jmx", new FileSystemResource(jmx));
+        request.add("jmx", new FileSystemResource(file));
         return RequestTools.Post(url, request);
     }
 
