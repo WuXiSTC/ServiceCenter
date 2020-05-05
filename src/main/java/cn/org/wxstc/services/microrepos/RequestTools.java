@@ -3,6 +3,7 @@ package cn.org.wxstc.services.microrepos;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.*;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -24,8 +26,6 @@ import java.util.*;
 
 @EnableConfigurationProperties({TempProperties.class})
 public class RequestTools {
-    @Resource
-    static TempProperties tempProperties;
 
     static public JSONObject Post(URI URL, MultiValueMap<String, Object> form_data) {
         RestTemplate restTemplate = new RestTemplate();
@@ -39,7 +39,7 @@ public class RequestTools {
         return restTemplate.postForEntity(URL, form_data, JSONObject.class).getBody();
     }
 
-    static public File GetFile(URI URL) {
+    static public InputStream GetFile(URI URL) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.execute(URL, HttpMethod.GET, null, clientHttpResponse -> {
             HttpStatus status = clientHttpResponse.getStatusCode();
@@ -47,15 +47,7 @@ public class RequestTools {
                 if (status == HttpStatus.NOT_FOUND) return null;
                 throw new ServerException(clientHttpResponse.toString());
             }
-            File ret = tempProperties.TempFile();
-            StreamUtils.copy(clientHttpResponse.getBody(), new FileOutputStream(ret));
-            return ret;
+            return clientHttpResponse.getBody();
         });
-    }
-
-    static public JSONObject PostFile(URI URL, File file) {
-        RestTemplate restTemplate = new RestTemplate();
-        //TODO:发送文件
-        return null;
     }
 }
