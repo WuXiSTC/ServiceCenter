@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
+import java.rmi.ServerException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,10 +29,10 @@ public class AdminService {
         return test.orElse(null);
     }
 
-    public JSONObject StartByID(UUID ID) throws IOException {
+    public JSONObject StartByID(UUID ID, long duration) throws IOException {
         Optional<Test> test = testRepository.findByID(ID);
         if (!test.isPresent()) return null;//不存在则返回不存在
-        return testOpService.StartByTest(test.get());
+        return testOpService.StartByTest(test.get(), duration);
     }
 
     public JSONObject StopByID(UUID ID) throws IOException {
@@ -52,11 +53,11 @@ public class AdminService {
         return testGetService.getFileByTestAndType(test.get(), Type);
     }
 
-    public JSONObject getGraph() {
+    public JSONObject getGraph() throws ServerException {
         return testNetRepository.getGraph();
     }
 
-    public JSONObject getTasks() {
+    public JSONObject getTasks() throws ServerException {
         return testNetRepository.getTasks();
     }
 }

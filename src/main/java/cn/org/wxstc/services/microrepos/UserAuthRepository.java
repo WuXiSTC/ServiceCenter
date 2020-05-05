@@ -25,6 +25,15 @@ public class UserAuthRepository {
                 .build().encode().toUri();
     }
 
+    public JSONObject Update(String ID, String PASS, String newPASS) {
+        URI URL = makeURL(properties.getUpdatePath());
+        MultiValueMap<String, Object> postData = new LinkedMultiValueMap<>();
+        postData.add("ID", ID);
+        postData.add("PASS", PASS);
+        postData.add("newPASS", newPASS);
+        return RequestTools.Post(URL, postData);
+    }
+
     private JSONObject Op(String ID, String PASS, String path) {
         URI URL = makeURL(path);
         MultiValueMap<String, Object> postData = new LinkedMultiValueMap<>();
@@ -40,14 +49,5 @@ public class UserAuthRepository {
 
     public JSONObject Register(String ID, String PASS) {
         return Op(ID, PASS, properties.getRegisterPath());
-    }
-
-    public JSONObject Update(String ID, String PASS, String newPASS) {
-        URI URL = makeURL(properties.getUpdatePath());
-        MultiValueMap<String, Object> postData = new LinkedMultiValueMap<>();
-        postData.add("ID", ID);
-        postData.add("PASS", PASS);
-        postData.add("newPASS", newPASS);
-        return RequestTools.Post(URL, postData);
     }
 }

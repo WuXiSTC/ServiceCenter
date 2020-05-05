@@ -48,10 +48,10 @@ public class UserService {
         return testOpService.NewByUserAndName(USER, Name, jmx);
     }
 
-    public JSONObject StartByIDAndUser(UUID ID, String USER) throws IOException {
+    public JSONObject StartByIDAndUser(UUID ID, String USER, long duration) throws IOException {
         Optional<Test> test = testRepository.findByIDAndUSER(ID, USER);
         if (!test.isPresent()) return null;//不存在则返回不存在
-        return testOpService.StartByTest(test.get());
+        return testOpService.StartByTest(test.get(), duration);
     }
 
     public JSONObject StopByIDAndUser(UUID ID, String USER) throws IOException {

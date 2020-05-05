@@ -22,7 +22,7 @@ public class TestGetService {
     public JSONObject getStateByTest(Test test) throws IOException {
         JSONObject result = testNetRepository.getState(test.getID());//存在则获取
         if (result != null) {
-            if (result.get("stateCode").equals(2) || result.get("stateCode").equals("2"))
+            if (result.get("stateCode").toString().contains("2"))
                 testOpService.StopByTest(test);//已停止则获取文件
             return result;//有则返回
         }

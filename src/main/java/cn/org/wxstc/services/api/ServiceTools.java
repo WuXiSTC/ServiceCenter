@@ -7,15 +7,15 @@ import java.util.UUID;
 
 public class ServiceTools {
     static public String getPathByIDAndUserAndType(UUID ID, String USER, String Type) {
-        return USER + "/" + Type + "/" + ID.toString() + "." + Type;
+        return "/" + USER + "/" + Type + "/" + ID.toString() + "." + Type;
     }
 
     static public boolean IsOk(JSONObject obj) {
-        return obj == null || !obj.get("ok").equals("true");
+        return obj != null && (obj.get("ok").equals(true) || obj.get("ok").equals("true"));
     }
 
     static public boolean AlreadyRun(Test test) {
-        return test.getJTLPath() != null || test.getLOGPath() != null ||
-                (!test.getJTLPath().equals("")) || (!test.getLOGPath().equals(""));
+        return (test.getJTLPath() != null && !test.getJTLPath().equals("")) ||
+                test.getLOGPath() != null && !test.getLOGPath().equals("");
     }
 }

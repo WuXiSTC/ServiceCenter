@@ -2,24 +2,23 @@ package cn.org.wxstc.services.controller;
 
 import cn.org.wxstc.services.api.UserService;
 import cn.org.wxstc.services.entity.Test;
-import cn.org.wxstc.services.microrepos.TempProperties;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.InputStream;
 import java.util.UUID;
 
-@EnableConfigurationProperties({TempProperties.class})
+@RestController
 public class UserTestController {
     @javax.annotation.Resource
     UserService userService;
@@ -58,11 +57,13 @@ public class UserTestController {
     }
 
     @RequestMapping(value = "/user/Task/start/{ID}")
-    public ResponseEntity<JSONObject> Start(HttpServletRequest request, @PathVariable(value = "ID") UUID ID) {
+    public ResponseEntity<JSONObject> Start(HttpServletRequest request,
+                                            @PathVariable(value = "ID") UUID ID,
+                                            @RequestParam(value = "duration") long duration) {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         try {
-            JSONObject obj = userService.StartByIDAndUser(ID, USER);
+            JSONObject obj = userService.StartByIDAndUser(ID, USER, duration);
             if (obj == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             return new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
@@ -84,15 +85,15 @@ public class UserTestController {
     }
 
     @RequestMapping(value = "/user/Task/get/{ID}/{Type}")
-    public ResponseEntity<?> Get(HttpServletRequest request,
-                                 @PathVariable(value = "Type") String Type,
-                                 @PathVariable(value = "ID") UUID ID) {
+    public ResponseEntity<Resource> Get(HttpServletRequest request,
+                                        @PathVariable(value = "Type") String Type,
+                                        @PathVariable(value = "ID") UUID ID) {
         String USER = SessionTools.GetUSER(request);
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         try {
             InputStream file = userService.getFileByIDAndUserAndType(ID, USER, Type);
             if (file == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            return new ResponseEntity<>(file, HttpStatus.OK);
+            return new ResponseEntity<>(new InputStreamResource(file), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

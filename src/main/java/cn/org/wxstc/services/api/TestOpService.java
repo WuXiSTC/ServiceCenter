@@ -36,7 +36,7 @@ public class TestOpService {
         return j;
     }
 
-    public JSONObject StartByTest(Test test) throws IOException {
+    public JSONObject StartByTest(Test test, long duration) throws IOException {
         if (testNetRepository.getState(test.getID()) != null) {
             JSONObject result = new JSONObject();
             result.put("ok", true);
@@ -50,8 +50,8 @@ public class TestOpService {
             testRepository.save(test);//并保存
         }
         JSONObject result = testNetRepository.New(test.getID(), file);//放到测试网络
-        if (ServiceTools.IsOk(result)) throw new IOException(result.toString());//失败则返回
-        result = testNetRepository.Start(test.getID());//成功则启动之
+        if (!ServiceTools.IsOk(result)) throw new IOException(result.toString());//失败则返回
+        result = testNetRepository.Start(test.getID(), duration);//成功则启动之
         return result;//返回
     }
 

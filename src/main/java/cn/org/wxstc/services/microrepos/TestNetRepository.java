@@ -4,12 +4,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.FileSystemResource;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -17,7 +18,6 @@ import javax.annotation.Resource;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.rmi.ServerException;
 import java.util.UUID;
 
 @Repository
@@ -35,39 +35,60 @@ public class TestNetRepository {
                 .port(properties.getPort());
     }
 
-    private URI makeURL(String op, UUID ID) {
+    private UriComponentsBuilder makeTaskOpURLBuilder(String op, UUID ID) {
         return makeURIBuilder()
-                .path(op).path(ID.toString())
+                .path(properties.getTaskOperationPath())
+                .path(op).path("/" + ID.toString());
+    }
+
+    private URI makeTaskOpURL(String op, UUID ID) {
+        return makeTaskOpURLBuilder(op, ID)
                 .build().encode().toUri();
     }
 
     public JSONObject New(UUID ID, InputStream jmx) throws IOException {
         File file = tempProperties.TempFile();
         StreamUtils.copy(jmx, new FileOutputStream(file));
-        URI url = makeURL("/new", ID);
+        URI url = makeTaskOpURL("/new", ID);
         MultiValueMap<String, Object> request = new LinkedMultiValueMap<>();
         request.add("jmx", new FileSystemResource(file));
         return RequestTools.Post(url, request);
     }
 
-    public JSONObject Start(UUID ID) {
-        URI url = makeURL("/start", ID);
+    public JSONObject Start(UUID ID, long duration) {
+        URI url = makeTaskOpURLBuilder("/start", ID).queryParam("duration", duration)
+                .build().encode().toUri();
         return Get(url);
     }
 
     public JSONObject Stop(UUID ID) {
-        URI url = makeURL("/stop", ID);
+        URI url = makeTaskOpURL("/stop", ID);
         return Get(url);
     }
 
     public JSONObject Delete(UUID ID) {
-        URI url = makeURL("/delete", ID);
+        URI url = makeTaskOpURL("/delete", ID);
         return Get(url);
     }
 
     public JSONObject getState(UUID ID) {
-        URI url = makeURL("/getState", ID);
+        URI url = makeTaskOpURL("/getState", ID);
         return Get(url);
+    }
+
+    public InputStream getConfig(UUID ID) {
+        URI url = makeTaskOpURL("/getConfig", ID);
+        return RequestTools.GetFile(url);
+    }
+
+    public InputStream getLog(UUID ID) {
+        URI url = makeTaskOpURL("/getLog", ID);
+        return RequestTools.GetFile(url);
+    }
+
+    public InputStream getResult(UUID ID) {
+        URI url = makeTaskOpURL("/getResult", ID);
+        return RequestTools.GetFile(url);
     }
 
     private URI makeBaseURL(String op) {
@@ -87,31 +108,15 @@ public class TestNetRepository {
     }
 
     private JSONObject Get(URI URL) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.execute(URL.toString(), HttpMethod.GET, null, clientHttpResponse -> {
-            HttpStatus status = clientHttpResponse.getStatusCode();
-            if (status != HttpStatus.OK) {
-                if (status == HttpStatus.NOT_FOUND) return null;
-                throw new ServerException(clientHttpResponse.toString());
-            }
-            return new Gson().fromJson(
-                    new InputStreamReader(clientHttpResponse.getBody(), StandardCharsets.UTF_8),
-                    JSONObject.class);
-        });
-    }
-
-    public InputStream getConfig(UUID ID) {
-        URI url = makeURL("/getConfig", ID);
-        return RequestTools.GetFile(url);
-    }
-
-    public InputStream getLog(UUID ID) {
-        URI url = makeURL("/getLog", ID);
-        return RequestTools.GetFile(url);
-    }
-
-    public InputStream getResult(UUID ID) {
-        URI url = makeURL("/getResult", ID);
-        return RequestTools.GetFile(url);
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            return restTemplate.execute(URL.toString(), HttpMethod.GET, null,
+                    clientHttpResponse -> new Gson().fromJson(
+                            new InputStreamReader(clientHttpResponse.getBody(), StandardCharsets.UTF_8),
+                            JSONObject.class));
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            if (HttpStatus.NOT_FOUND.equals(e.getStatusCode())) return null;
+            throw e;
+        }
     }
 }
