@@ -7,7 +7,8 @@ import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -27,25 +28,25 @@ public class AdminService {
         return test.orElse(null);
     }
 
-    public JSONObject StartByID(UUID ID) {
+    public JSONObject StartByID(UUID ID) throws IOException {
         Optional<Test> test = testRepository.findByID(ID);
         if (!test.isPresent()) return null;//不存在则返回不存在
         return testOpService.StartByTest(test.get());
     }
 
-    public JSONObject StopByID(UUID ID) {
+    public JSONObject StopByID(UUID ID) throws IOException {
         Optional<Test> test = testRepository.findByID(ID);
         if (!test.isPresent()) return null;//不存在则返回不存在
         return testOpService.StopByTest(test.get());
     }
 
-    public JSONObject getStateByID(UUID ID) {
+    public JSONObject getStateByID(UUID ID) throws IOException {
         Optional<Test> test = testRepository.findByID(ID);
         if (!test.isPresent()) return null;//不存在则返回不存在
         return testGetService.getStateByTest(test.get());
     }
 
-    public File getFileByIDAndType(UUID ID, String Type) {
+    public InputStream getFileByIDAndType(UUID ID, String Type) {
         Optional<Test> test = testRepository.findByID(ID);
         if (!test.isPresent()) return null;//不存在则返回不存在
         return testGetService.getFileByTestAndType(test.get(), Type);

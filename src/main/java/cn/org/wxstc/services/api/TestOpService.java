@@ -24,7 +24,7 @@ public class TestOpService {
     @Resource
     private FileRepository fileRepository;
 
-    public Object NewByUserAndName(String USER, String Name, InputStream jmx) throws IOException {
+    public JSONObject NewByUserAndName(String USER, String Name, InputStream jmx) throws IOException {
         UUID ID = UUIDs.timeBased();
         String jmxPath = ServiceTools.getPathByIDAndUserAndType(ID, USER, "jmx");
         ResponseEntity<String> result = fileRepository.Put(jmxPath, jmx);//先上传文件
