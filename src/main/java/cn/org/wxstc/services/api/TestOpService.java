@@ -34,6 +34,12 @@ public class TestOpService {
     }
 
     public JSONObject StartByTest(Test test) {
+        if (testNetRepository.getState(test.getID()) != null) {
+            JSONObject result = new JSONObject();
+            result.put("ok", true);
+            result.put("message", "已启动");
+            return result;
+        }
         File file = fileRepository.Get(test.getJMXPath());//从文件存储库取文件
         if (file == null) {
             JSONObject result = new JSONObject();

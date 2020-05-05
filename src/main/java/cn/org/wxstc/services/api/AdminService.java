@@ -40,13 +40,15 @@ public class AdminService {
     }
 
     public JSONObject getStateByID(UUID ID) {
-        return testGetService.getStateByID(ID);
+        Optional<Test> test = testRepository.findByID(ID);
+        if (!test.isPresent()) return null;//不存在则返回不存在
+        return testGetService.getStateByTest(test.get());
     }
 
     public File getFileByIDAndType(UUID ID, String Type) {
         Optional<Test> test = testRepository.findByID(ID);
         if (!test.isPresent()) return null;//不存在则返回不存在
-        return testGetService.getFileByIDAndUserAndType(ID, test.get().getUSER(), Type);
+        return testGetService.getFileByTestAndType(test.get(), Type);
     }
 
     public JSONObject getGraph() {

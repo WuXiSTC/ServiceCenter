@@ -62,12 +62,12 @@ public class UserService {
     public JSONObject getStateByIDAndUser(UUID ID, String USER) {
         Optional<Test> test = testRepository.findByIDAndUSER(ID, USER);
         if (!test.isPresent()) return null;//不存在则返回不存在
-        return testGetService.getStateFromTestNetByTest(test.get());
+        return testGetService.getStateByTest(test.get());
     }
 
     public File getFileByIDAndUserAndType(UUID ID, String USER, String Type) {
         Optional<Test> test = testRepository.findByIDAndUSER(ID, USER);
         if (!test.isPresent()) return null;//不存在则返回不存在
-        return testGetService.getFileByIDAndUserAndType(ID, USER, Type);
+        return testGetService.getFileByTestAndType(test.get(), Type);
     }
 }

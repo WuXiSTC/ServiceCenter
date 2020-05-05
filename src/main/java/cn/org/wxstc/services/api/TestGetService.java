@@ -3,19 +3,14 @@ package cn.org.wxstc.services.api;
 import cn.org.wxstc.services.entity.Test;
 import cn.org.wxstc.services.microrepos.FileRepository;
 import cn.org.wxstc.services.microrepos.TestNetRepository;
-import cn.org.wxstc.services.repository.TestRepository;
 import com.alibaba.fastjson.JSONObject;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class TestGetService {
-    @Resource
-    private TestRepository testRepository;
     @Resource
     private TestNetRepository testNetRepository;
     @Resource
@@ -23,7 +18,7 @@ public class TestGetService {
     @Resource
     private TestOpService testOpService;
 
-    private JSONObject getStateFromTestNetByTest(Test test) {
+    public JSONObject getStateByTest(Test test) {
         JSONObject result = testNetRepository.getState(test.getID());//存在则获取
         if (result != null) {
             if (result.get("stateCode").equals(2) || result.get("stateCode").equals("2"))
@@ -36,20 +31,22 @@ public class TestGetService {
         return result;//无则返回已停止
     }
 
-    public JSONObject getStateByID(UUID ID) {
-        Optional<Test> test = testRepository.findByID(ID);
-        if (!test.isPresent()) return null;//不存在则返回不存在
-        return getStateFromTestNetByTest(test.get());
-    }
-
-    public JSONObject getStateByIDAndUser(UUID ID, String USER) {
-        Optional<Test> test = testRepository.findByIDAndUSER(ID, USER);
-        if (!test.isPresent()) return null;//不存在则返回不存在
-        return getStateFromTestNetByTest(test.get());
-    }
-
-    public File getFileByIDAndUserAndType(UUID ID, String USER, String Type) {
-        String path = ServiceTools.getPathByIDAndUserAndType(ID, USER, Type);
+    public File getFileByTestAndType(Test test, String Type) {
+        String path;
+        switch (Type) {
+            case "jmx":
+                path = test.getJMXPath();
+                break;
+            case "jtl":
+                path = test.getJTLPath();
+                break;
+            case "log":
+                path = test.getLOGPath();
+                break;
+            default:
+                path = ServiceTools.getPathByIDAndUserAndType(test.getID(), test.getUSER(), Type);
+        }
+        if (path == null) return null;
         return fileRepository.Get(path);
     }
 }

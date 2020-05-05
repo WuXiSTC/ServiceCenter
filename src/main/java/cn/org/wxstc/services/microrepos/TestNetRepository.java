@@ -1,16 +1,23 @@
 package cn.org.wxstc.services.microrepos;
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.rmi.ServerException;
 import java.util.UUID;
 
 @Repository
@@ -41,22 +48,22 @@ public class TestNetRepository {
 
     public JSONObject Start(UUID ID) {
         URI url = makeURL("/start", ID);
-        return RequestTools.Get(url);
+        return Get(url);
     }
 
     public JSONObject Stop(UUID ID) {
         URI url = makeURL("/stop", ID);
-        return RequestTools.Get(url);
+        return Get(url);
     }
 
     public JSONObject Delete(UUID ID) {
         URI url = makeURL("/delete", ID);
-        return RequestTools.Get(url);
+        return Get(url);
     }
 
     public JSONObject getState(UUID ID) {
         URI url = makeURL("/getState", ID);
-        return RequestTools.Get(url);
+        return Get(url);
     }
 
     public File getConfig(UUID ID) {
@@ -81,13 +88,26 @@ public class TestNetRepository {
 
     public JSONObject getTasks() {
         URI url = makeBaseURL(properties.getTasksQueryPath());
-        return RequestTools.Get(url);
+        return Get(url);
 
     }
 
     public JSONObject getGraph() {
         URI url = makeBaseURL(properties.getGraphQueryPath());
-        return RequestTools.Get(url);
+        return Get(url);
+    }
 
+    private JSONObject Get(URI URL) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.execute(URL.toString(), HttpMethod.GET, null, clientHttpResponse -> {
+            HttpStatus status = clientHttpResponse.getStatusCode();
+            if (status != HttpStatus.OK) {
+                if (status == HttpStatus.NOT_FOUND) return null;
+                throw new ServerException(clientHttpResponse.toString());
+            }
+            return new Gson().fromJson(
+                    new InputStreamReader(clientHttpResponse.getBody(), StandardCharsets.UTF_8),
+                    JSONObject.class);
+        });
     }
 }
