@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.Resource;
-import java.io.File;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.rmi.ServerException;
@@ -66,21 +66,6 @@ public class TestNetRepository {
         return Get(url);
     }
 
-    public File getConfig(UUID ID) {
-        URI url = makeURL("/getConfig", ID);
-        return RequestTools.GetFile(url);
-    }
-
-    public File getLog(UUID ID) {
-        URI url = makeURL("/getLog", ID);
-        return RequestTools.GetFile(url);
-    }
-
-    public File getResult(UUID ID) {
-        URI url = makeURL("/getResult", ID);
-        return RequestTools.GetFile(url);
-    }
-
     private URI makeBaseURL(String op) {
         return makeURIBuilder().path(op)
                 .build().encode().toUri();
@@ -109,5 +94,20 @@ public class TestNetRepository {
                     new InputStreamReader(clientHttpResponse.getBody(), StandardCharsets.UTF_8),
                     JSONObject.class);
         });
+    }
+
+    public InputStream getConfig(UUID ID) {
+        URI url = makeURL("/getConfig", ID);
+        return RequestTools.GetFile(url);
+    }
+
+    public InputStream getLog(UUID ID) {
+        URI url = makeURL("/getLog", ID);
+        return RequestTools.GetFile(url);
+    }
+
+    public InputStream getResult(UUID ID) {
+        URI url = makeURL("/getResult", ID);
+        return RequestTools.GetFile(url);
     }
 }
