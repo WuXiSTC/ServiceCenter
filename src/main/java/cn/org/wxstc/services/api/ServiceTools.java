@@ -18,11 +18,4 @@ public class ServiceTools {
         return test.getJTLPath() != null || test.getLOGPath() != null ||
                 (!test.getJTLPath().equals("")) || (!test.getLOGPath().equals(""));
     }
-
-    static public JSONObject NotExistsJSONObject() {
-        JSONObject result = new JSONObject();
-        result.put("ok", false);
-        result.put("message", "测试不存在");
-        return result;
-    }
 }

@@ -2,8 +2,10 @@ package cn.org.wxstc.services.controller;
 
 import cn.org.wxstc.services.api.UserService;
 import cn.org.wxstc.services.entity.Test;
+import cn.org.wxstc.services.microrepos.TempProperties;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +18,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.UUID;
 
+@EnableConfigurationProperties({TempProperties.class})
 public class UserTestController {
     @javax.annotation.Resource
     UserService userService;
+    @javax.annotation.Resource
+    TempProperties tempProperties;
 
     @RequestMapping(value = "/user/getTask/{ID}")
     public ResponseEntity<Test> GetTask(HttpServletRequest request,
@@ -45,7 +50,7 @@ public class UserTestController {
         if (USER == null) return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         if (file == null || file.isEmpty()) return ResponseTools.JSON(false, "请上传文件", HttpStatus.BAD_REQUEST);
         try {
-            File jmx = File.createTempFile("cn.org.wxstc.services", "tmp");
+            File jmx = tempProperties.TempFile();
             file.transferTo(jmx);
             ResponseEntity<JSONObject> result = new ResponseEntity<>(
                     userService.NewByUserAndName(USER, Name, jmx), HttpStatus.OK);
