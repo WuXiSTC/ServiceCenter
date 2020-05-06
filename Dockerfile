@@ -11,4 +11,4 @@ COPY entrypoint.sh /usr/local/bin/
 WORKDIR /app
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
-CMD ["java -jar services.jar"]
+CMD ["java","-jar","services.jar"]
