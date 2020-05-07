@@ -43,12 +43,11 @@ public class TestOpService {
             result.put("message", "已启动");
             return result;
         }
+        if (ServiceTools.AlreadyRun(test)) {//如果已经运行过
+            throw new IOException("已运行，不能重复运行");
+        }
         InputStream file = fileRepository.Get(test.getJMXPath());//从文件存储库取文件
         if (file == null) throw new IOException("无法读取文件流" + test.getJMXPath());
-        if (ServiceTools.AlreadyRun(test)) {//如果已经运行过
-            test = new Test(test.getName(), test.getUSER(), test.getJMXPath());//就复制一个
-            testRepository.save(test);//并保存
-        }
         JSONObject result = testNetRepository.New(test.getID(), file);//放到测试网络
         if (!ServiceTools.IsOk(result)) throw new IOException(result.toString());//失败则返回
         result = testNetRepository.Start(test.getID(), duration);//成功则启动之
