@@ -44,7 +44,10 @@ public class TestOpService {
             return result;
         }
         if (ServiceTools.AlreadyRun(test)) {//如果已经运行过
-            throw new IOException("已运行，不能重复运行");
+            JSONObject result = new JSONObject();
+            result.put("ok", false);
+            result.put("message", "不能重复运行");
+            return result;
         }
         InputStream file = fileRepository.Get(test.getJMXPath());//从文件存储库取文件
         if (file == null) throw new IOException("无法读取文件流" + test.getJMXPath());
