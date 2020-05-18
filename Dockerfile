@@ -1,7 +1,7 @@
 FROM gradle:jdk8
 WORKDIR /app
 COPY . .
-RUN gradle assemble
+RUN gradle -d assemble --no-daemon 
 
 FROM openjdk:8-alpine
 
