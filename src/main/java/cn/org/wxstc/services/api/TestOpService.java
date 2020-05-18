@@ -68,13 +68,21 @@ public class TestOpService {
         InputStream file = testNetRepository.getResult(test.getID());//从测试网络取文件
         if (file != null) {
             String path = ServiceTools.getPathByIDAndUserAndType(test.getID(), test.getUSER(), "jtl");
-            fileRepository.Put(path, file);//上传到文件存储库
+            try {
+                fileRepository.Put(path, file);//上传到文件存储库
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             test.setJTLPath(path);
         }
         file = testNetRepository.getLog(test.getID());//从测试网络取文件
         if (file != null) {
             String path = ServiceTools.getPathByIDAndUserAndType(test.getID(), test.getUSER(), "log");
-            fileRepository.Put(path, file);//上传到文件存储库
+            try {
+                fileRepository.Put(path, file);//上传到文件存储库
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             test.setLOGPath(path);
         }
         testRepository.save(test);//记录
