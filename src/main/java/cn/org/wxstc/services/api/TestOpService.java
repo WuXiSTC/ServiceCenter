@@ -70,7 +70,7 @@ public class TestOpService {
             String path = ServiceTools.getPathByIDAndUserAndType(test.getID(), test.getUSER(), "jtl");
             try {
                 fileRepository.Put(path, file);//上传到文件存储库
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             test.setJTLPath(path);
@@ -80,7 +80,7 @@ public class TestOpService {
             String path = ServiceTools.getPathByIDAndUserAndType(test.getID(), test.getUSER(), "log");
             try {
                 fileRepository.Put(path, file);//上传到文件存储库
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             test.setLOGPath(path);
